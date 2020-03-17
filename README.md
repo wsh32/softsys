@@ -1,3 +1,9 @@
+# SoftSys
+
+Olin College of Engineering Software Systems course.
+
+Self studying this course in the Spring 2020 semester.
+
 # ExercisesInC
 
 by Allen B. Downey
