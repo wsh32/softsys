@@ -17,5 +17,5 @@ Here are the resources I used to self-study this course.
 
 ## My notes
 
-I took notes using Noteability and they are all uploaded to my Google Drive. Links to come.
+I took notes using Noteability and they are all uploaded to my Google Drive. Here's a link to the folder: [Drive Link](https://drive.google.com/drive/folders/16TKfdsKzJlLJVXXO8458ZdIgocoGlfSv?usp=sharing)
 
