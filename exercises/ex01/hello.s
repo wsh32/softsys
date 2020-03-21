@@ -1,26 +1,5 @@
 	.file	"hello.c"
 	.text
-	.section	.rodata.str1.1,"aMS",@progbits,1
-.LC0:
-	.string	"Hello, World!"
-	.section	.text.startup,"ax",@progbits
-	.p2align 4
-	.globl	main
-	.type	main, @function
-main:
-.LFB11:
-	.cfi_startproc
-	subq	$8, %rsp
-	.cfi_def_cfa_offset 16
-	leaq	.LC0(%rip), %rdi
-	call	puts@PLT
-	xorl	%eax, %eax
-	addq	$8, %rsp
-	.cfi_def_cfa_offset 8
-	ret
-	.cfi_endproc
-.LFE11:
-	.size	main, .-main
 	.globl	x
 	.data
 	.align 4
@@ -28,5 +7,58 @@ main:
 	.size	x, 4
 x:
 	.long	5
+	.section	.rodata
+.LC0:
+	.string	"%i"
+	.text
+	.globl	print_x
+	.type	print_x, @function
+print_x:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	x(%rip), %eax
+	movl	%eax, %esi
+	leaq	.LC0(%rip), %rdi
+	movl	$0, %eax
+	call	printf@PLT
+	nop
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	print_x, .-print_x
+	.section	.rodata
+.LC1:
+	.string	"Hello, World!"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB1:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	x(%rip), %eax
+	addl	$1, %eax
+	movl	%eax, -4(%rbp)
+	leaq	.LC1(%rip), %rdi
+	call	puts@PLT
+	movl	$0, %eax
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE1:
+	.size	main, .-main
 	.ident	"GCC: (GNU) 9.2.0"
 	.section	.note.GNU-stack,"",@progbits
