@@ -20,9 +20,10 @@ int main(int argc, char *argv[]) {
             append = 1;
             break;
         }
-        argc -= optind;
-        argv += optind;
     }
+
+    argc -= optind;
+    argv += optind;
 
     // open file with append if requested
     FILE *out_file;
