@@ -24,14 +24,22 @@ by setting the pointer it got as an argument.
 #include <math.h>
 #include <assert.h>
 
-/* get_int_part: Compute the integer part of the elements in an array.
+double * get_int_part(double * array, int length) {
+    /* get_int_part: Compute the integer part of the elements in an array.
 
-array: array of doubles
-length: number of elements in the array
+    array: array of doubles
+    length: number of elements in the array
 
-returns: new array, caller must free
-*/
-// TODO: Write this function
+    returns: new array, caller must free
+    */
+    double* array_out = malloc(sizeof(double) * length);
+    for (int i = 0; i < length; i++) {
+        double int_part;
+        double frac_part = modf(array[i], &int_part);
+        array_out[i] = int_part;
+    }
+    return array_out;
+}
 
 void test_get_int_part()
 {
@@ -42,21 +50,29 @@ void test_get_int_part()
     double *int_part = get_int_part(array, length);
 
     for (int i=0; i<length; i++) {
-        //printf("%lf\n", result[i]);
+        // printf("%lf\n", int_part[i]);
         assert(int_part[i] == expected[i]);
     }
 }
 
 
-/* get_both_parts: Compute the int and frac parts of the elements in an array.
+double * get_both_parts(double * array, int length, double ** p) {
+    /* get_both_parts: Compute the int and frac parts of the elements in an array.
 
-array: array of doubles
-length: number of elements in the array
-p: location where the address of the frac_array should go
+    array: array of doubles
+    length: number of elements in the array
+    p: location where the address of the frac_array should go
 
-returns: new array, caller must free
-*/
-//TODO: Write this function
+    returns: new array, caller must free
+    */
+    double* int_array = malloc(sizeof(double) * length);
+    double* frac_array = malloc(sizeof(double) * length);
+    for (int i = 0; i < length; i++) {
+        frac_array[i] = modf(array[i], int_array + i);
+    }
+    *p = frac_array;
+    return int_array;
+}
 
 
 void test_get_both_parts()
