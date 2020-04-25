@@ -55,7 +55,9 @@ void print_list(Node **list) {
 */
 int pop(Node **list) {
     int val = (*list)->val;
+    Node *prev = *list;
     *list = (*list)->next;
+    free(prev);
     return val;
 }
 
