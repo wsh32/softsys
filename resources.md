@@ -11,9 +11,10 @@ Here are the resources I used to self-study this course.
 
 ## Books
 
-[Heads First C](http://karadev.net/uroci/filespdf/files/head-first-c-o-reilly-david-grifffiths-dawn-griffiths.pdf)
-[Think OS](https://greenteapress.com/wp/think-os/)
-[Modern C](https://gforge.inria.fr/frs/download.php/latestfile/5298/ModernC.pdf)
+- [Heads First C](http://karadev.net/uroci/filespdf/files/head-first-c-o-reilly-david-grifffiths-dawn-griffiths.pdf)
+- [Think OS](https://greenteapress.com/wp/think-os/)
+- [Modern C](https://gforge.inria.fr/frs/download.php/latestfile/5298/ModernC.pdf)
+- [Little Book of Semaphores](http://greenteapress.com/semaphores/LittleBookOfSemaphores.pdf)
 
 ## My notes
 
