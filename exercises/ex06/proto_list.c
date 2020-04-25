@@ -35,8 +35,8 @@ Node *make_node(int val, Node *next) {
 *
 * list: pointer to pointer to Node
 */
-void print_list(Node *list) {
-    Node *current = list;
+void print_list(Node **list) {
+    Node *current = *list;
 
     printf("[ ");
     while (current != NULL) {
@@ -59,7 +59,7 @@ int pop(Node *list) {
     if (head == NULL) {
         return -1;
     }
-    list = head->next;
+    *list = *(head->next);
     return head->val;
 }
 
@@ -69,10 +69,10 @@ int main() {
     head->next = make_node(2, NULL);
     head->next->next = make_node(3, NULL);
 
-    print_list(head);
+    print_list(&head);
 
     int retval = pop(head);
     printf("retval = %d\n", retval);
-    print_list(head);
+    print_list(&head);
 
 }
