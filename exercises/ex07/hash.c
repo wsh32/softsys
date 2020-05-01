@@ -193,9 +193,9 @@ int equal_int (void *ip, void *jp)
 */
 int equal_string (void *s1, void *s2)
 {
-    char **a = (char**) s1;
-    char **b = (char**) s2;
-    return (strcmp(*a, *b) == 0);
+    char *a = (char*) s1;
+    char *b = (char*) s2;
+    return (strcmp(a, b) == 0);
 }
 
 
@@ -209,7 +209,7 @@ int equal_string (void *s1, void *s2)
 */
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
-    return (h1->equal)(h1->key, h2->key);
+    return h1->equal(h1->key, h2->key);
 }
 
 
@@ -299,8 +299,7 @@ Value *list_lookup(Node *list, Hashable *key)
 {
     if (list == NULL) {
         return NULL;
-    } else if (list->key->equal(list->key, key)) {
-        // XXX why does equal_hashable(list->key, key) segfault?
+    } else if (equal_hashable(list->key, key)) {
         return list->value;
     } else {
         return list_lookup(list->next, key);
@@ -353,7 +352,7 @@ void map_add(Map *map, Hashable *key, Value *value)
     Node *new_node;
     if (map->lists[index]) {
         new_node = prepend(key, value, map->lists[index]);
-    } else{
+    } else {
         new_node = make_node(key, value, NULL);
     }
     map->lists[index] = new_node;
