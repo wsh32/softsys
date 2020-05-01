@@ -8,19 +8,7 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
-// VALUE: represents a value in a key-value pair
-
-/* Here's one way of making a polymorphic object in C */
-
-typedef struct {
-    enum Type {INT, STRING} type;
-    union {
-        int i;
-        char *s;
-    };
-} Value;
+#include "hash.h"
 
 
 /* Makes a Value object that contains an int.
@@ -36,7 +24,6 @@ Value *make_int_value(int i)
     value->i = i;
     return value;
 }
-
 
 /* Makes a Value object that contains a string.
 *
@@ -73,25 +60,6 @@ void print_value (Value *value)
         break;
     }
 }
-
-// HASHABLE: Represents a key in a key-value pair.
-
-/* Here's another way to make a polymorphic object.
-
-The key can be any pointer type.  It's stored as a (void *), so
-when you extract it, you have to cast it back to whatever it is.
-
-`hash` is a pointer to a function that knows how to hash the key.
-`equal` is a pointer to a function that knows how to compare keys.
-
-*/
-
-typedef struct {
-    void *key;
-    int (*hash) (void *);
-    int (*equal) (void *, void *);
-} Hashable;
-
 
 /* Makes a Hashable object.
 *
@@ -243,15 +211,6 @@ Hashable *make_hashable_string (char *s)
 }
 
 
-// NODE: a node in a list of key-value pairs
-
-typedef struct node {
-    Hashable *key;
-    Value *value;
-    struct node *next;
-} Node;
-
-
 /* Makes a Node. */
 Node *make_node(Hashable *key, Value *value, Node *next)
 {
@@ -308,14 +267,6 @@ Value *list_lookup(Node *list, Hashable *key)
 }
 
 
-// MAP: a map is an array of lists of key-value pairs
-
-typedef struct map {
-    int n;
-    Node **lists;
-} Map;
-
-
 /* Makes a Map with n lists. */
 Map *make_map(int n)
 {
@@ -327,13 +278,13 @@ Map *make_map(int n)
     for (i=0; i<n; i++) {
         map->lists[i] = NULL;
     }
+    map->size = 0;
     return map;
 }
 
 
 /* Prints a Map. */
-void print_map(Map *map)
-{
+void print_map(Map *map) {
     int i;
 
     for (i=0; i<map->n; i++) {
@@ -346,8 +297,11 @@ void print_map(Map *map)
 
 
 /* Adds a key-value pair to a map. */
-void map_add(Map *map, Hashable *key, Value *value)
-{
+void map_add(Map *map, Hashable *key, Value *value) {
+    if (map->size == map->n) {
+        resize_map(map);
+    }
+
     int index = hash_hashable(key) % map->n;
     Node *new_node;
     if (map->lists[index]) {
@@ -356,6 +310,27 @@ void map_add(Map *map, Hashable *key, Value *value)
         new_node = make_node(key, value, NULL);
     }
     map->lists[index] = new_node;
+    map->size++;
+}
+
+
+void resize_map(Map *map) {
+    Node **new_lists = malloc(sizeof(Node *) * (map->n + 1));
+    for (int i=0; i<map->n+1; i++) {
+        new_lists[i] = NULL;
+    }
+
+    Node **old_lists = map->lists;
+    map->lists = new_lists;
+    // Readd nodes
+    for (int i=0; i<map->n; i++) {
+        Node *node = old_lists[i];
+        while (node != NULL) {
+            map_add(map, node->key, node->value);
+            node = node->next;
+        }
+    }
+    map->n++;
 }
 
 
