@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <glib.h>
 #include "frequency_analysis.h"
 
@@ -16,12 +17,11 @@
 void get_words_from_book(FILE *book, GSList **words) {
     char buff[80];  // 79 letter word max?
     while (fscanf(book, "%24s", buff) == 1) {
-        // TODO remove punctuation from buffer
         if (DEBUG) {
             printf("%s\n", buff);
         }
         char *buff_copy = malloc(sizeof(char) * strlen(buff));
-        strcpy(buff_copy, buff);
+        reformat_string_lower_az(buff, buff_copy);
         *words = g_slist_append(*words, buff_copy);
     }
 
@@ -91,6 +91,18 @@ void print_words_frequency(GSList *frequencies, int num_print) {
         printf("Word: %s, Number of cases: %i\n", current_word->word, current_word->frequency);
         frequencies = frequencies->next;
     }
+}
+
+
+void reformat_string_lower_az(char *src, char *out) {
+    for(; *src; ++src) {
+        if (isupper((unsigned char) *src)) {
+            *out++ = tolower((unsigned char) *src);
+        } else if (islower((unsigned char) *src)) {
+            *out++ = (unsigned char) *src;
+        }
+    }
+    *out = 0;
 }
 
 /**
