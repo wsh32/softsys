@@ -53,8 +53,8 @@ void print_list(Node *list) {
 * returns: head of modified list
 */
 Node *pop(Node *list, int *value_p) {
-    // FILL THIS IN!
-    return NULL;
+    *value_p = list->val;
+    return list->next;
 }
 
 /* Swaps the first two elements of the list.
@@ -65,8 +65,10 @@ Node *pop(Node *list, int *value_p) {
 * returns: head of modified list
 */
 Node *swap(Node *list) {
-    // FILL THIS IN!
-    return NULL;
+    Node *next = list->next;
+    list->next = next->next;
+    next->next = list;
+    return next;
 }
 
 /* Adds a new element to the beginning of the list.

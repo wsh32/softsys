@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s <search phrase>\n", argv[0]);
         return 1;
     }
-    const char *PYTHON = "/usr/bin/python2";
-    const char *SCRIPT = "rssgossip.py";
+    const char *PYTHON = "/usr/bin/python";
+    const char *SCRIPT = "rssgossip3.py";
     char *feeds[] = {
         "http://www.nytimes.com/services/xml/rss/nyt/Africa.xml",
         "http://www.nytimes.com/services/xml/rss/nyt/Americas.xml",
@@ -40,12 +40,30 @@ int main(int argc, char *argv[])
     char var[255];
 
     for (int i=0; i<num_feeds; i++) {
-        sprintf(var, "RSS_FEED=%s", feeds[i]);
-        char *vars[] = {var, NULL};
+        // start new process
+        pid_t pid = fork();
 
-        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
-        if (res == -1) {
-            error("Can't run script.");
+        if (pid == -1) {
+            error("Cannot fork");
+        } else if (pid == 0) {
+            sprintf(var, "RSS_FEED=%s", feeds[i]);
+            char *vars[] = {var, NULL};
+
+            int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
+            if (res == -1) {
+                error("Can't run script.");
+            }
+
+            break;
+        }
+    }
+
+    for (int i=0; i < num_feeds; i++) {
+        pid_t pid = wait(NULL);
+        // wait hangs until a child process exits
+
+        if (pid == -1) {
+            error("Error on wait");
         }
     }
     return 0;
