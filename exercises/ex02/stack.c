@@ -40,6 +40,10 @@ int main()
     bar();
 
     for (i=0; i<SIZE; i++) {
+        // Seg fault when array is called
+        // Because *array is a pointer local to the foo function, it is deconstructed
+        // when the function exits, so there is no data when it is called outside of
+        // foo(), which gives a seg fault.
         printf("%d\n", array[i]);
     }
 
