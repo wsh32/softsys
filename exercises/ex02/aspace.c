@@ -10,6 +10,11 @@ License: GNU GPLv3
 
 int var1;
 
+void print_local() {
+    int new_stack = 5;
+    printf("Address of new_stack is %p\n", &new_stack);
+}
+
 int main ()
 {
     int var2 = 5;
@@ -24,5 +29,7 @@ int main ()
     printf ("p2 points to %p\n", p2);
     printf ("s points to %p\n", s);
 
+    print_local();
     return 0;
 }
+
