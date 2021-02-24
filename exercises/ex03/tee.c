@@ -45,3 +45,14 @@ int main(int argc, char *argv[]) {
 
     fclose(out_file);
 }
+
+// Reflect:
+// I went through this assignment pretty easily. I think the biggest sticking
+// point was the FileI/O, but I went through most of those things through Google
+// searching.
+//
+// Compare:
+// One thing that I see often in professional code that I don't do on habit in
+// error checking with malloc. This seems pretty important so I'll keep that in
+// mind!
+
