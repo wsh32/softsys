@@ -1,5 +1,14 @@
 #include "trout.h"
 
+int max_ttl = 30;
+int nprobes = 2;
+int seq = 0;
+Rec *rec = (Rec *) sendbuf;
+
+int datalen = sizeof (Rec);         /* length of the data in a datagram */
+
+u_short dport = 32768 + 668;        /* destination port -- hopefully unused */
+
 /* NOTES: system calls beginning with a capital letter are Stevens's
    wrapper functions.  Each one invokes the method and checks the
    return value.  If the call fails, it invokes err_sys, which prints

@@ -23,6 +23,8 @@
 #include <syslog.h>
 #include <strings.h>
 
+#include "util.h"
+
 #define MAXLINE 4096
 #define BUFSIZE 1500
 
@@ -65,17 +67,24 @@ ssize_t Recvfrom(int fd, void *ptr, size_t nbytes, int flags,
 void err_sys (char *fmt, ...);
 void err_quit (char *fmt, ...);
 
+void loop_ttl();
+
+void alarm(int x);
+void setuid(int x);
+int getuid();
+int getpid();
+
 /* variables we might want to configure */
-int max_ttl = 30;
-int nprobes = 2;
+extern int max_ttl;
+extern int nprobes;
 
 /* other global variables */
 
-int seq = 0;
+extern int seq;
 
 char recvbuf[BUFSIZE];
 char sendbuf[BUFSIZE];
-Rec *rec = (Rec *) sendbuf;
+extern Rec *rec;
 
 int sendfd, recvfd;
 int pipefd[2];              /* the pipe for the alarm handler */
@@ -86,15 +95,17 @@ Sockaddr *salast;
 Sockaddr *sabind;
 
 socklen_t salen;                    /* length of a socket address */
-int datalen = sizeof (Rec);         /* length of the data in a datagram */
+extern int datalen;
 
 u_short sport;                      /* source UDP port # */
-u_short dport = 32768 + 668;        /* destination port -- hopefully unused */
+extern u_short dport;
                                     /* 668 = the neighbor of the beast */
 Timeval sendtv[1];
 Timeval recvtv[1];
 Timeval difftv[1];
 
-void loop_ttl();
+
+
 
 #endif
+
