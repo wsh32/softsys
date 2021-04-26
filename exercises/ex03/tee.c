@@ -26,26 +26,32 @@ int main(int argc, char *argv[]) {
     argv += optind;
 
     // open file with append if requested
-    FILE *out_file;
+    FILE *out_file[argc];
     if (DEBUG) {
         printf("File name: %s\n", argv[0]);
     }
-    if (append) {
-        out_file = fopen(argv[0], "a");
-    } else {
-        out_file = fopen(argv[0], "w");
+    for (int i = 0; i < argc; i++) {
+        if (append) {
+            out_file[i] = fopen(argv[i], "a");
+        } else {
+            out_file[i] = fopen(argv[i], "w");
+        }
     }
 
     // write to file and print
     char buf[BUF_SIZE];
     while (fgets(buf, BUF_SIZE, stdin) != NULL) {
         puts(buf);
-        if (out_file) {
-            fprintf(out_file, "%s", buf);
+        if (argc != 0) {
+            for (int i = 0; i < argc; i++) {
+                fprintf(out_file[i], "%s", buf);
+            }
         }
     }
 
-    fclose(out_file);
+    for (int i = 0; i < argc; i++) {
+        fclose(out_file[i]);
+    }
 }
 
 // Reflect:
