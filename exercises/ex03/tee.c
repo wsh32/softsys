@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     // write to file and print
     char buf[BUF_SIZE];
     while (fgets(buf, BUF_SIZE, stdin) != NULL) {
-        puts(buf);
+        printf("%s", buf);
         if (argc != 0) {
             for (int i = 0; i < argc; i++) {
                 fprintf(out_file[i], "%s", buf);
