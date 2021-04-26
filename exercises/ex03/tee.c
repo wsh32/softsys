@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #define BUF_SIZE 80
-#define DEBUG 1  // enable debug messages printed
+#define DEBUG 0  // disable debug messages printed
 
 int main(int argc, char *argv[]) {
     // get cmd line arguments
