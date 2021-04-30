@@ -78,9 +78,9 @@ float my_random_float2()
 // compute a random double using my algorithm
 double my_random_double()
 {
-    int x;
-    int mant;
-    int exp = 126;
+    long x;
+    long mant;
+    long exp = 1023;
     int mask = 1;
 
     union {
@@ -90,9 +90,10 @@ double my_random_double()
 
     // generate random bits until we see the first set bit
     while (1) {
-        x = random();
+        // 63 random bits
+        x = random() << 32 | random();
         if (x == 0) {
-            exp -= 31;
+            exp -= 63;
         } else {
             break;
         }
@@ -105,8 +106,9 @@ double my_random_double()
     }
 
     // use the remaining bit as the mantissa
-    mant = x >> 8;
-    b.l = (exp << 23) | mant;
+    // https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+    mant = x >> 11;
+    b.l = (exp << 52) | mant;
 
     return b.d;
 }
