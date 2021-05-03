@@ -18,7 +18,10 @@ Based on an example in Head First C.
 #include <errno.h>
 #include <signal.h>
 
+#define ALARM_TIME 5
+
 int score = 0;
+int strikes = 1;
 
 /* Set up a signal handler.
 
@@ -45,7 +48,10 @@ void end_game(int sig)
 */
 void times_up(int sig) {
     puts("\nTIME'S UP!");
-    raise(SIGINT);
+
+    if (!strikes--) {
+        raise(SIGINT);
+    }
 }
 
 int main(void) {
@@ -68,12 +74,14 @@ int main(void) {
         printf("\nWhat is %d times %d? ", a, b);
 
         // set (or reset) the alarm
-        alarm(5);
+        alarm(ALARM_TIME);
 
         // get the answer
         while (1) {
             char *ret = fgets(txt, 4, stdin);
-            if (ret) break;
+            if (ret || ret == NULL) {
+                break;
+            }
         }
         answer = atoi(txt);
 
